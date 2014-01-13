@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Main module file for Islandora N-Triples.
+ */
+
+/**
+ * Custom menu access callback.
+ *
+ * @return bool
+ */
+function islandora_ntriples_access_check() {
+  // @todo: Only allow querying from the IP whiltelist.
+  return TRUE;
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function islandora_ntriples_menu() {
+  $items = array();
+  $items['admin/islandora/ntriples'] = array(
+    'title' => 'Islandora N-Triples',
+    'description' => 'Configure Islandora N-Triples.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_ntriples_admin_settings'),
+    'access arguments' => array('administer Islandora BagIt'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['islandora_ntriples/autocomplete'] = array(
+    'title' => 'Autocomplete for N-Triples',
+    'page callback' => 'islandora_ntriples_autocomplete',
+    'access callback' => 'islandora_ntriples_access_check',
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Admin settings form builder.
+ */
+function islandora_ntriples_admin_settings() {
+  $form = array();
+  $form['islandora_ntiples_test_autocomplete'] = array(
+    '#title' => t('Test the autocomplete'),
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => '',
+    '#description' => t("Type something here to test the autocomplete.
+      Note that this field doesn't actually perform a real search."),
+    '#maxlength' => 255,
+    '#autocomplete_path' => 'islandora_ntriples/autocomplete',
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Autocomplete search function.
+ * 
+ * @ param string $string
+ *   The string being queried against the autocomplete URL.
+ */
+function islandora_ntriples_autocomplete($string) {
+  $matches = array();
+  $result = db_select('islandora_ntriples_triples', 'nt')
+    ->fields('nt', array('search_string'))
+    ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
+    ->execute();
+  // save the query to matches
+  foreach ($result as $row) {
+    $matches[$row->search_string] = $row->search_string;
+  }
+  // Return the result to the form in json
+  drupal_json_output($matches);
+}
+

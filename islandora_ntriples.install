@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Install related hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ */
+function islandora_ntriples_schema() {
+  $schema['islandora_ntriples_triples'] = array(
+    'description' => 'Stores example person entries for demonstration purposes.',
+    'fields' => array(
+      'id'  => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ),
+      'subject'  => array(
+        'type' => 'text',
+        'size' => 'small',
+        'description' => 'N-Triples subject.',
+      ),
+      'predicate'  => array(
+        'type' => 'text',
+        'size' => 'small',
+        'description' => 'N-Triples predicate.',
+      ),
+      'object'  => array(
+        'type' => 'text',
+        'size' => 'small',
+        'description' => 'N-Triples object.',
+      ),
+      'search_string'  => array(
+        'type' => 'text',
+        'size' => 'small',
+        'description' => 'The string that we search on; this will be a normalized copy of the value in subject.',
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'search_string'    => array(array('search_string', 100)),
+    ),
+  );
+
+  return $schema;
+}

@@ -1,0 +1,6 @@
+name = Islandora N-Triples
+description = Proof of concept module to allow querying of local datasets in the N-Triples format using Drupal's autocomplete functionality.
+core = 7.x
+package = Islandora Tools
+dependencies[] = islandora
+configure = admin/islandora/ntriples
