@@ -29,12 +29,35 @@ function islandora_ntriples_drush_command() {
     'description' => dt('Populate the islandora_ntriples_triples table in the current Drupal database.'),
     'arguments'   => array(
       'file'    => dt('Path to the N-Triples data file you want to load.'),
+      'vocabulary'    => dt('A short string (no spaces) that identifies the vocabulary.'),
     ),
     'examples' => array(
-      'Standard example' => 'drush load-islandora-ntriples /path/to/data.nt',
-      'Alias example' => 'drush lin /path/to/data.nt',
+      'Standard example' => 'drush load-islandora-ntriples /path/to/data.nt foo',
+      'Alias example' => 'drush lin /path/to/data.nt foo',
     ),
     'aliases' => array('lin'),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
+  );
+  $items['purge-islandora-ntriples-vocab'] = array(
+    'description' => dt('Purge all entries from islandora_ntriples_triples table with the specified vocab alias.'),
+    'arguments'   => array(
+      'vocabulary'    => dt('A short string (no spaces) that identifies the vocabulary.'),
+    ),
+    'examples' => array(
+      'Standard example' => 'drush purge-islandora-ntriples-vocab foo',
+      'Alias example' => 'drush pinv foo',
+    ),
+    'aliases' => array('pinv'),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
+  );
+  $items['list-islandora-ntriples-vocabs'] = array(
+    'description' => dt('Lists all distinct vocabularies in islandora_ntriples_triples table.'),
+    'arguments' => array(),
+    'examples' => array(
+      'Standard example' => 'drush list-islandora-ntriples-vocabs',
+      'Alias example' => 'drush linv',
+    ),
+    'aliases' => array('linv'),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
   return $items;
@@ -46,7 +69,7 @@ function islandora_ntriples_drush_command() {
  * Loads input file containing N-Triples into the 'islandora_ntriples_triples'
  * table.
  */
-function drush_islandora_ntriples_load_islandora_ntriples($file = '') {
+function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
   // Four columns: subject, predicate, object, search_string
   // <http://id.loc.gov/vocabulary/graphicMaterials/tgm012200> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Diving boards"@en .
 
@@ -68,7 +91,7 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '') {
         $triple[] = '';
       }
       // Load this triple into the database.
-      islandora_ntriples_load_triple($triple);
+      islandora_ntriples_load_triple($triple, $vocab);
     }
   } else {
     // @todo: Report error opening the input file.
@@ -81,9 +104,10 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '') {
  * @param array $triple
  * 
  */
-function islandora_ntriples_load_triple($triple) {
+function islandora_ntriples_load_triple($triple, $vocab) {
   $columns = array('subject','predicate', 'object', 'search_string');
   $entry = array_combine($columns, $triple);
+  $entry['vocabulary'] = $vocab;
   try {
     $return_value = db_insert('islandora_ntriples_triples')
       ->fields($entry)
@@ -92,5 +116,36 @@ function islandora_ntriples_load_triple($triple) {
   catch (Exception $e) {
     drupal_set_message(t('db_insert failed. Message = %message, query= %query',
       array('%message' => $e->getMessage(), '%query' => $e->query_string)), 'error');
+  }
+}
+
+/**
+ * Callback function for drush purge-islandora-ntriples-vocab.
+ * 
+ * Deletes all entries from islandora_ntriples_triples table with
+ * the specified vocab alias.
+ */
+function drush_islandora_ntriples_purge_islandora_ntriples_vocab($vocab) {
+  db_delete('islandora_ntriples_triples')
+    ->condition('vocabulary', $vocab)
+    ->execute();
+  // @todo: Add error catching and a report on how many triples were deleted.
+}
+
+/**
+ * Callback function for drush purge-islandora-ntriples-vocab.
+ * 
+ * Deletes all entries from islandora_ntriples_triples table with
+ * the specified vocab alias.
+ */
+function drush_islandora_ntriples_list_islandora_ntriples_vocabs() {
+  $matches = array();
+  $result = db_select('islandora_ntriples_triples', 'nt')
+    ->fields('nt', array('vocabulary'))
+    ->distinct()
+    ->execute();
+  // Prepare the results of the query to return to the form.
+  foreach ($result as $row) {
+    print $row->vocabulary . "\n";
   }
 }

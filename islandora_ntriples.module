@@ -11,7 +11,7 @@
  * @return bool
  */
 function islandora_ntriples_access_check() {
-  // @todo: Only allow querying from the IP whiltelist.
+  // @todo: Only allow querying from an IP whiltelist.
   return TRUE;
 }
 
@@ -56,9 +56,9 @@ function islandora_ntriples_admin_settings() {
 }
 
 /**
- * Autocomplete search function.
+ * Autocomplete callback.
  * 
- * @ param string $string
+ * @param string $string
  *   The string being queried against the autocomplete URL.
  */
 function islandora_ntriples_autocomplete($string) {
@@ -67,11 +67,11 @@ function islandora_ntriples_autocomplete($string) {
     ->fields('nt', array('search_string'))
     ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
     ->execute();
-  // save the query to matches
+  // Prepare the results of the query to return to the form.
   foreach ($result as $row) {
     $matches[$row->search_string] = $row->search_string;
   }
-  // Return the result to the form in json
+  // Return the result to the form in json.
   drupal_json_output($matches);
 }
 

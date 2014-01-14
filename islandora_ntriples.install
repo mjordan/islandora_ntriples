@@ -19,6 +19,11 @@ function islandora_ntriples_schema() {
         'not null' => TRUE,
         'description' => 'Primary key.',
       ),
+      'vocabulary'  => array(
+        'type' => 'text',
+        'size' => 'small',
+        'description' => 'A short string (no spaces) identifying the vocabulary.',
+      ),      
       'subject'  => array(
         'type' => 'text',
         'size' => 'small',
