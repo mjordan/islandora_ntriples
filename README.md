@@ -12,7 +12,7 @@ After you enable the module, load an N-Triples file by running the following dru
 drush load-islandora-ntriples /path/to/data.nt foo
 ```
 
-where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' is an alias (string with no spaces or punctuation) identifying the vocabulary that the triples are from.
+where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' is an alias (string with no spaces or punctuation other than underscores) identifying the vocabulary that the triples are from.
 
 Two more commands you can run are:
 

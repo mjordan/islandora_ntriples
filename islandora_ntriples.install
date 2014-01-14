@@ -22,7 +22,7 @@ function islandora_ntriples_schema() {
       'vocabulary'  => array(
         'type' => 'text',
         'size' => 'small',
-        'description' => 'A short string (no spaces) identifying the vocabulary.',
+        'description' => 'A short string (no spaces or punctuation other than underscores) identifying the vocabulary.',
       ),      
       'subject'  => array(
         'type' => 'text',
