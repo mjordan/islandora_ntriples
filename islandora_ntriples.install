@@ -26,22 +26,22 @@ function islandora_ntriples_schema() {
       ),      
       'subject'  => array(
         'type' => 'text',
-        'size' => 'small',
+        'size' => 'normal',
         'description' => 'N-Triples subject.',
       ),
       'predicate'  => array(
         'type' => 'text',
-        'size' => 'small',
+        'size' => 'normal',
         'description' => 'N-Triples predicate.',
       ),
       'object'  => array(
         'type' => 'text',
-        'size' => 'small',
+        'size' => 'normal',
         'description' => 'N-Triples object.',
       ),
       'search_string'  => array(
         'type' => 'text',
-        'size' => 'small',
+        'size' => 'normal',
         'description' => 'The string that we search on; this will be a normalized copy of the value in subject.',
       ),
     ),
