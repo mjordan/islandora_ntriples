@@ -84,7 +84,7 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
       if (preg_match('/authoritativeLabel/', $line)) {
         $search_string = trim($triple[2], '"');
         $search_string = preg_replace('/"@.+$/', '', $search_string);
-        $triple[] = $search_string;
+        $triple[] = trim($search_string);
       }
       // For all other triples, assign a blank search string.
       else {
