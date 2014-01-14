@@ -1,8 +1,8 @@
-#### SUMMARY
+#### Overview
 
 A proof-of-concept module to allow loading and querying, via Drupal's autocomplete functionality, of Linked Data in N-Triples format. The best source of data in N-Triples is http://id.loc.gov. 
 
-#### INSTALLATION
+#### Installation
 
 Clone this module into your drupal modules folder and enable it.
 
@@ -16,8 +16,8 @@ where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' 
 
 Two more commands you can run are:
 
-* drush purge-islandora-ntriples-vocab {alias}: Purge all entries from islandora_ntriples_triples table with the specified vocab alias.
-* drush list-islandora-ntriples-vocabs: Lists all distinct vocabularies in islandora_ntriples_triples table.
+```drush purge-islandora-ntriples-vocab {alias}```: Purge all entries from islandora_ntriples_triples table with the specified vocab alias.
+```drush list-islandora-ntriples-vocabs```: Lists all distinct vocabularies in islandora_ntriples_triples table.
 
 #### Testing
 
