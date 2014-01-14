@@ -17,6 +17,7 @@ where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' 
 Two more commands you can run are:
 
 ```drush purge-islandora-ntriples-vocab {alias}```: Purge all entries from islandora_ntriples_triples table with the specified vocab alias.
+
 ```drush list-islandora-ntriples-vocabs```: Lists all distinct vocabularies in islandora_ntriples_triples table.
 
 #### Testing
