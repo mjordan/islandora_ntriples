@@ -1,6 +1,6 @@
 #### Overview
 
-A proof-of-concept module to allow loading and querying, via Drupal's autocomplete functionality, of Linked Data in N-Triples format. The best source of data in N-Triples is http://id.loc.gov. 
+A proof-of-concept module to allow loading and querying, via Drupal's autocomplete functionality, of Linked Data in N-Triples format. The best source of data in N-Triples is http://id.loc.gov/download/. 
 
 #### Installation
 
