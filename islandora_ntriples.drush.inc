@@ -76,6 +76,7 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
   $handle = fopen($file, "r");
   if ($handle) {
     while (($line = fgets($handle)) !== false) {
+      $line = trim($line);
       // Remove the ' .' from the end of each N-Triple statement.
       $line = preg_replace('/\s\./', '', $line);
       $triple = explode(' ', $line, 3);
