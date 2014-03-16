@@ -44,7 +44,7 @@ function islandora_ntriples_admin_settings() {
   $form['islandora_ntiples_test_autocomplete'] = array(
     '#title' => t('Test the autocomplete'),
     '#type' => 'textfield',
-    '#size' => 60,
+    '#size' => 80,
     '#default_value' => '',
     '#description' => t("Type something here to test the autocomplete."),
     '#maxlength' => 255,
@@ -84,10 +84,12 @@ function islandora_ntriples_autocomplete($vocab, $string) {
   // Prepare the results of the query to return to the form. We use the entry's
   // URI as the $matches key and the search string as the value.
   foreach ($result as $row) {
-    // Clean up the N-Triples 'uriref' < and > characters.
-    $uri = trim($row->subject, '<');
-    $uri = trim($uri, '>');
-    $matches[$uri] = $row->search_string;
+    // We concatenate the URI and the search string as the key. This new
+    // string will be entered into the text field. On submit, we parse
+    // the value so we can look up the values for the URI in the ntriples
+    // table.
+    $key = $row->search_string . ' ' . $row->subject;
+    $matches[$key] = $row->search_string;
   }
   // Return the result to the form in json.
   drupal_json_output($matches);
