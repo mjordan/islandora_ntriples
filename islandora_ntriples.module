@@ -25,7 +25,7 @@ function islandora_ntriples_menu() {
     'description' => 'Configure Islandora N-Triples.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('islandora_ntriples_admin_settings'),
-    'access arguments' => array('administer Islandora BagIt'),
+    'access arguments' => array('administer Islandora N-Triples'),
     'type' => MENU_NORMAL_ITEM,
   );
   $items['islandora_ntriples/autocomplete'] = array(
