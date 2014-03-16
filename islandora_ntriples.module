@@ -70,20 +70,24 @@ function islandora_ntriples_autocomplete($vocab, $string) {
   $matches = array();
   if ($vocab == 'all') {
     $result = db_select('islandora_ntriples_triples', 'nt')
-      ->fields('nt', array('search_string'))
+      ->fields('nt', array('subject', 'search_string'))
       ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
       ->execute();
   }
   else {
     $result = db_select('islandora_ntriples_triples', 'nt')
-      ->fields('nt', array('search_string'))
+      ->fields('nt', array('subject', 'search_string'))
       ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
       ->condition('vocabulary', $vocab)
       ->execute();
   }
-  // Prepare the results of the query to return to the form.
+  // Prepare the results of the query to return to the form. We use the entry's
+  // URI as the $matches key and the search string as the value.
   foreach ($result as $row) {
-    $matches[$row->search_string] = $row->search_string;
+    // Clean up the N-Triples 'uriref' < and > characters.
+    $uri = trim($row->subject, '<');
+    $uri = trim($uri, '>');
+    $matches[$uri] = $row->search_string;
   }
   // Return the result to the form in json.
   drupal_json_output($matches);
