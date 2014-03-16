@@ -12,7 +12,7 @@ After you enable the module, load an N-Triples file by running the following dru
 drush load-islandora-ntriples /path/to/data.nt foo
 ```
 
-where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' is an alias (string with no spaces or punctuation other than underscores) identifying the vocabulary that the triples are from.
+where '/path/to/data.nt' is the path to the file containing N-Triples and 'foo' is an alias (string with no spaces or punctuation other than underscores) identifying the vocabulary that the triples are from. 'all' is a reserved alias; do not use it.
 
 Two more commands you can run are:
 
@@ -24,7 +24,9 @@ Two more commands you can run are:
 
 After you have loaded at least one vocabulary, go to the admin form for the module (admin/islandora/ntriples) and type something. You should see the autocomplete in action.
 
-Further instructions on how to integrate this module into your site are coming as soon as I figure them out.
+#### Configuration
+
+Integration with Islandora add/update metadata forms is ongoing. Currently, assigning an "Autocomplete Path" value of "islandora_ntriples/autocomplete/all" to a text field will allow that field to use all of the entries in the local N-Triples database, or, alternatively, assigning a value of "islandora_ntriples/autocomplete/{alias}" (where {alias} is a single vocabulary alias) will limit entries to that vocabulary.
 
 #### License
 

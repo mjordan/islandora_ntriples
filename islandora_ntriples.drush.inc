@@ -68,20 +68,21 @@ function islandora_ntriples_drush_command() {
  * 
  * Loads input file containing N-Triples into the 'islandora_ntriples_triples'
  * table.
+ * 
+ * The N-Triples files contain four columns: subject, predicate, object, search_string
+ * <http://id.loc.gov/vocabulary/graphicMaterials/tgm012200> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Diving boards"@en .
  */
-function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
-  // Four columns: subject, predicate, object, search_string
-  // <http://id.loc.gov/vocabulary/graphicMaterials/tgm012200> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Diving boards"@en .
-
+function drush_islandora_ntriples_load_islandora_ntriples($file, $vocab) {
   $handle = fopen($file, "r");
   if ($handle) {
-    while (($line = fgets($handle)) !== false) {
+    while (($line = fgets($handle)) !== FALSE) {
       $line = trim($line);
       // Remove the ' .' from the end of each N-Triple statement.
       $line = preg_replace('/\s\./', '', $line);
       $triple = explode(' ', $line, 3);
-      // To get the strings we'll be searching against, get the autoriatitveLabel
-      // triple and remove the quotation marks and language attribute (e.g. @en).
+      // To get the strings we'll be searching against, get the
+      // autoriatitveLabel triple and remove the quotation marks and
+      // language attribute (e.g. @en).
       if (preg_match('/authoritativeLabel/', $line)) {
         $search_string = trim($triple[2], '"');
         $search_string = preg_replace('/"@.+$/', '', $search_string);
@@ -94,7 +95,8 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
       // Load this triple into the database.
       islandora_ntriples_load_triple($triple, $vocab);
     }
-  } else {
+  }
+  else {
     // @todo: Report error opening the input file.
   }
 }
@@ -103,10 +105,10 @@ function drush_islandora_ntriples_load_islandora_ntriples($file = '', $vocab) {
  * Insert a single triple into the database.
  * 
  * @param array $triple
- * 
+ *   Array containing the values to be inserted into the database.
  */
 function islandora_ntriples_load_triple($triple, $vocab) {
-  $columns = array('subject','predicate', 'object', 'search_string');
+  $columns = array('subject', 'predicate', 'object', 'search_string');
   $entry = array_combine($columns, $triple);
   $entry['vocabulary'] = $vocab;
   try {

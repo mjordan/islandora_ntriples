@@ -7,8 +7,6 @@
 
 /**
  * Custom menu access callback.
- *
- * @return bool
  */
 function islandora_ntriples_access_check() {
   // @todo: Only allow querying from an IP whiltelist.
@@ -16,7 +14,7 @@ function islandora_ntriples_access_check() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function islandora_ntriples_menu() {
   $items = array();
@@ -25,14 +23,15 @@ function islandora_ntriples_menu() {
     'description' => 'Configure Islandora N-Triples.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('islandora_ntriples_admin_settings'),
-    'access arguments' => array('administer Islandora N-Triples'),
+    'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['islandora_ntriples/autocomplete'] = array(
+  $items['islandora_ntriples/autocomplete/%'] = array(
     'title' => 'Autocomplete for N-Triples',
     'page callback' => 'islandora_ntriples_autocomplete',
     'access callback' => 'islandora_ntriples_access_check',
-    'type' => MENU_CALLBACK
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
   );
   return $items;
 }
@@ -47,26 +46,41 @@ function islandora_ntriples_admin_settings() {
     '#type' => 'textfield',
     '#size' => 60,
     '#default_value' => '',
-    '#description' => t("Type something here to test the autocomplete.
-      Note that this field doesn't actually perform a real search."),
+    '#description' => t("Type something here to test the autocomplete."),
     '#maxlength' => 255,
-    '#autocomplete_path' => 'islandora_ntriples/autocomplete',
+    '#autocomplete_path' => 'islandora_ntriples/autocomplete/all',
   );
   return system_settings_form($form);
 }
 
 /**
  * Autocomplete callback.
- * 
+ *
+ * @param string $vocab
+ *   A vocabulary alias.
  * @param string $string
  *   The string being queried against the autocomplete URL.
+ * 
+ * @todo: Figure out a way to limit query to multiple
+ * vocabs, maybe using a comma-delimted list as an autocomplete
+ * path parameter. Don't want to use MySQL 'in' clause since it
+ * won't work in Postgres.
  */
-function islandora_ntriples_autocomplete($string) {
+function islandora_ntriples_autocomplete($vocab, $string) {
   $matches = array();
-  $result = db_select('islandora_ntriples_triples', 'nt')
-    ->fields('nt', array('search_string'))
-    ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
-    ->execute();
+  if ($vocab == 'all') {
+    $result = db_select('islandora_ntriples_triples', 'nt')
+      ->fields('nt', array('search_string'))
+      ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
+      ->execute();
+  }
+  else {
+    $result = db_select('islandora_ntriples_triples', 'nt')
+      ->fields('nt', array('search_string'))
+      ->condition('search_string', '%' . db_like($string) . '%', 'LIKE')
+      ->condition('vocabulary', $vocab)
+      ->execute();
+  }
   // Prepare the results of the query to return to the form.
   foreach ($result as $row) {
     $matches[$row->search_string] = $row->search_string;
@@ -74,4 +88,3 @@ function islandora_ntriples_autocomplete($string) {
   // Return the result to the form in json.
   drupal_json_output($matches);
 }
-
