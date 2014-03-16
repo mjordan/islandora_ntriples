@@ -94,3 +94,4 @@ function islandora_ntriples_autocomplete($vocab, $string) {
   // Return the result to the form in json.
   drupal_json_output($matches);
 }
+
