@@ -26,7 +26,7 @@ After you have loaded at least one vocabulary, go to the admin form for the modu
 
 #### Configuration
 
-Integration with Islandora add/update metadata forms is ongoing. Currently, assigning an "Autocomplete Path" value of "islandora_ntriples/autocomplete/all" to a text field will allow that field to use all of the entries in the local N-Triples database, or, alternatively, assigning a value of "islandora_ntriples/autocomplete/{alias}" (where {alias} is a single vocabulary alias) will limit entries to that vocabulary.
+Integration with Islandora add/update metadata forms is ongoing. Currently, assigning an "Autocomplete Path" value of "islandora_ntriples/autocomplete/all" to a text field (using the Islandora Form Builder, for example) will allow that field to use all of the entries in the local N-Triples database, or, alternatively, assigning a value of "islandora_ntriples/autocomplete/{alias}" (where {alias} is a single vocabulary alias) will limit entries to that vocabulary.
 
 #### License
 
