@@ -70,7 +70,7 @@ function islandora_ntriples_drush_command() {
  * table.
  * 
  * The N-Triples files contain four columns: subject, predicate, object, search_string
- * <http://id.loc.gov/vocabulary/graphicMaterials/tgm012200> <http://www.loc.gov/mads/rdf/v1#authoritativeLabel> "Diving boards"@en .
+ * <http://id.loc.gov/vocabulary/graphicMaterials/tgm012200> <http://www.w3.org/2004/02/skos/core#prefLabel> "Diving boards"@en .
  */
 function drush_islandora_ntriples_load_islandora_ntriples($file, $vocab) {
   $handle = fopen($file, "r");
@@ -83,7 +83,7 @@ function drush_islandora_ntriples_load_islandora_ntriples($file, $vocab) {
       // To get the strings we'll be searching against, get the
       // autoriatitveLabel triple and remove the quotation marks and
       // language attribute (e.g. @en).
-      if (preg_match('/authoritativeLabel/', $line)) {
+      if (preg_match('/core#prefLabel/', $line)) {
         $search_string = trim($triple[2], '"');
         $search_string = preg_replace('/"@.+$/', '', $search_string);
         $triple[] = trim($search_string);
