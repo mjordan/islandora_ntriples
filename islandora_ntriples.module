@@ -81,8 +81,7 @@ function islandora_ntriples_autocomplete($vocab, $string) {
       ->condition('vocabulary', $vocab)
       ->execute();
   }
-  // Prepare the results of the query to return to the form. We use the entry's
-  // URI as the $matches key and the search string as the value.
+  // Prepare the results of the query to return to the form.
   foreach ($result as $row) {
     // We concatenate the URI and the search string as the key. This new
     // string will be entered into the text field. On submit, we parse
